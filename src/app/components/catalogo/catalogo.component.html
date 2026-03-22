@@ -1,0 +1,44 @@
+<div class="container mb-5">
+  <div class="d-flex justify-content-center flex-wrap gap-2">
+    <button (click)="filtrar(0)" 
+            class="btn btn-outline-secondary px-4 shadow-sm">
+      Todos
+    </button>
+
+    <button *ngFor="let cat of categorias" 
+            (click)="filtrar(cat.id)" 
+            class="btn btn-outline-primary px-4 shadow-sm">
+      {{ cat.nombre }}
+    </button>
+  </div>
+</div>
+
+<hr class="mb-5 opacity-25">
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="col" *ngFor="let p of productos">
+    <div class="card h-100 shadow-sm border-0">
+      <img [src]="p.imagenUrl || 'https://via.placeholder.com/150'" 
+           class="card-img-top" [alt]="p.nombre" 
+           style="height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
+      
+      <div class="card-body text-center">
+        <h5 class="card-title fw-bold">{{p.nombre}}</h5>
+        <p class="card-text text-muted small">{{p.descripcion}}</p>
+        <h4 class="text-primary fw-bold">S/ {{p.precio}}</h4>
+      </div>
+
+      <div class="card-footer bg-transparent border-top-0 pb-3">
+        <div class="d-grid gap-2">
+          <button [routerLink]="['/producto', p.id]" class="btn btn-outline-secondary rounded-pill">
+            Ver detalle
+          </button>
+          
+          <button (click)="agregarAlCarrito(p)" class="btn btn-primary rounded-pill">
+            Agregar al carrito
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

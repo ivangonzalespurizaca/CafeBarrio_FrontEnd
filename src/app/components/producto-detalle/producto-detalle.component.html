@@ -1,0 +1,30 @@
+<div class="container mt-5" *ngIf="producto">
+  <div class="row align-items-center">
+    <div class="col-md-6 mb-4 mb-md-0">
+      <img [src]="producto.imagenUrl" class="img-fluid rounded-4 shadow-lg" [alt]="producto.nombre">
+    </div>
+    
+    <div class="col-md-6 ps-md-5">
+      <h1 class="display-5 fw-bold">{{ producto.nombre }}</h1>
+      <p class="text-muted mb-4">{{ producto.descripcion }}</p>
+      
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <h2 class="text-primary fw-bold mb-0">S/ {{ producto.precio }}</h2>
+        <span class="badge px-3 py-2 rounded-pill" 
+              [ngClass]="producto.stock > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+          {{ producto.stock > 0 ? 'Stock: ' + producto.stock : 'Agotado' }}
+        </span>
+      </div>
+
+      <div class="d-grid gap-2 d-sm-flex">
+        <button (click)="agregarAlCarrito()" class="btn btn-primary btn-lg px-5 rounded-pill shadow" 
+                [disabled]="producto.stock <= 0">
+          Agregar al carrito
+        </button>
+        <button routerLink="/" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">
+          Volver al catálogo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

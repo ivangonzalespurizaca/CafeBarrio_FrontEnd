@@ -1,0 +1,77 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4 rounded-4 border-0">
+                <h3 class="mb-4">Tu Pedido ☕</h3>
+
+                <div *ngIf="items.length === 0" class="text-center py-5">
+                    <p class="text-muted h5">Aún no has elegido ningún café.</p>
+                    <button routerLink="/" class="btn btn-outline-primary mt-3 rounded-pill">Volver al catálogo</button>
+                </div>
+
+                <div *ngIf="items.length > 0" class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr class="text-muted">
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th class="text-center">Cantidad</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of items">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img [src]="item.producto.imagenUrl" class="rounded-3 me-3"
+                                            style="width: 50px; height: 50px; object-fit: cover;">
+                                        <span class="fw-bold">{{ item.producto.nombre }}</span>
+                                    </div>
+                                </td>
+                                <td>S/ {{ item.producto.precio }}</td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <button (click)="disminuir(item.producto.id!)"
+                                            class="btn btn-sm btn-light rounded-circle border">-</button>
+                                        <span class="fw-bold">{{ item.cantidad }}</span>
+                                        <button (click)="aumentar(item.producto)"
+                                            class="btn btn-sm btn-light rounded-circle border"
+                                            [disabled]="item.cantidad >= item.producto.stock">+</button>
+                                    </div>
+                                </td>
+                                <td class="fw-bold">S/ {{ item.producto.precio * item.cantidad | number:'1.2-2' }}</td>
+                                <td>
+                                    <button (click)="eliminar(item.producto.id!)" class="btn btn-link text-danger">
+                                        <i class="bi bi-trash"></i> Borrar
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" *ngIf="items.length > 0">
+            <div class="card shadow-sm p-4 rounded-4 border-0 bg-light">
+                <h4>Resumen</h4>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span>S/ {{ total | number:'1.2-2' }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4 h4 fw-bold">
+                    <span>Total</span>
+                    <span class="text-primary">S/ {{ total | number:'1.2-2' }}</span>
+                </div>
+                <button routerLink="/checkout" class="btn btn-primary btn-lg w-100 rounded-pill shadow">
+                    Continuar al pago
+                </button>
+                <button routerLink="/" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">
+                    Seguir comprando
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
