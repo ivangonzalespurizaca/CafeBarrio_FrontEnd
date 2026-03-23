@@ -1,59 +1,62 @@
-# CafeteriaFrontend
+# Café de Barrio - Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.22.
+Esta es la interfaz de usuario del e-commerce "Café de Barrio", desarrollada con **Angular 19**. Permite a los clientes navegar por el catálogo, gestionar su carrito y realizar pedidos, además de ofrecer un panel administrativo para la gestión de productos y ventas.
 
-## Development server
+---
 
-To start a local development server, run:
+## Requisitos del Entorno
+
+Para asegurar que la aplicación corra correctamente, asegúrese de tener:
+* **Node.js**: v18.0.0 o superior (Recomendado: LTS).
+* **Angular CLI**: v19.0.0 o superior.
+* **Navegador**: Google Chrome, Microsoft Edge o Firefox (versiones recientes).
+
+---
+
+## Instrucciones de Ejecución
+
+Siga estos pasos para levantar la aplicación en su entorno local:
+
+### 1. Instalación de Dependencias
+Como el proyecto utiliza librerías externas (SweetAlert2, Bootstrap, etc.), es obligatorio descargar los módulos de Node antes del primer inicio.
+Desde la carpeta `/frontend`, ejecute:
+```bash
+npm install
+```
+
+### 2. Configuración de la API
+La aplicación está configurada para comunicarse con el backend en la siguiente dirección:
+
+* **URL Base:** `http://localhost:8080/api`
+* *Nota: Asegúrese de que su Backend esté en ejecución para que el catálogo cargue los productos correctamente.*
+
+### 3. Iniciar el Servidor de Desarrollo
+Una vez instaladas las dependencias, levante el proyecto con:
 
 ```bash
 ng serve
 ```
+### 4. Acceso a la Aplicación
+Abra su navegador y acceda a: 
+**[http://localhost:4200](http://localhost:4200)**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Acceso Administrativo
+Para probar las funciones de **Mantenimiento de Productos** y **Listado de Pedidos**, debe iniciar sesión:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. **Navegar a la ruta:** `/login`.
+2. **Ingresar las credenciales** de administrador mostradas en la página del login.
+3. El sistema utiliza **Guards de Angular** para proteger estas rutas de accesos no autorizados.
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Librerías Principales Utilizadas
+* **SweetAlert2**: Para diálogos de confirmación y notificaciones estéticas.
+* **Bootstrap 5**: Para el diseño responsivo y componentes de UI.
+* **Angular Router**: Para la navegación entre Catálogo, Carrito y Panel Admin.
+---
+## Capturas de Pantalla
+Puede visualizar el funcionamiento detallado de la aplicación en el siguiente documento:
+[Ver Evidencias de Funcionamiento](./CapturasDePantalla.pdf)
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
