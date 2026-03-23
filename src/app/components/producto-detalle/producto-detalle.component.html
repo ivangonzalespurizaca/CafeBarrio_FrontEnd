@@ -1,29 +1,54 @@
-<div class="container mt-5" *ngIf="producto">
-  <div class="row align-items-center">
-    <div class="col-md-6 mb-4 mb-md-0">
-      <img [src]="producto.imagenUrl" class="img-fluid rounded-4 shadow-lg" [alt]="producto.nombre">
+<div class="container mt-5 pt-4 mb-5" *ngIf="producto">
+  <div class="row align-items-center g-5">
+    
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 overflow-hidden bg-light rounded-4">
+        <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center p-4">
+          <img [src]="producto.imagenUrl || 'assets/img/default-coffee.png'" 
+               class="img-fluid" 
+               [alt]="producto.nombre"
+               style="object-fit: contain; max-height: 100%;">
+        </div>
+      </div>
     </div>
     
-    <div class="col-md-6 ps-md-5">
-      <h1 class="display-5 fw-bold">{{ producto.nombre }}</h1>
-      <p class="text-muted mb-4">{{ producto.descripcion }}</p>
+    <div class="col-md-6 ps-lg-5">
+      <span class="badge bg-secondary-subtle text-secondary mb-2 text-uppercase fw-bold" style="letter-spacing: 1px;">
+        Cafetería de Especialidad
+      </span>
       
-      <div class="d-flex align-items-center gap-3 mb-4">
-        <h2 class="text-primary fw-bold mb-0">S/ {{ producto.precio }}</h2>
-        <span class="badge px-3 py-2 rounded-pill" 
-              [ngClass]="producto.stock > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+      <h1 class="display-4 fw-bold text-dark mb-3">{{ producto.nombre }}</h1>
+      
+      <p class="lead text-muted mb-4" style="line-height: 1.8;">
+        {{ producto.descripcion }}
+      </p>
+      
+      <div class="d-flex align-items-center gap-4 mb-5">
+        <h2 class="fw-bold text-dark mb-0">S/ {{ producto.precio | number:'1.2-2' }}</h2>
+        
+        <span class="badge px-3 py-2 rounded-pill shadow-sm" 
+              [class]="producto.stock > 0 ? 'bg-success-subtle text-success border border-success' : 'bg-danger-subtle text-danger border border-danger'">
+          <i class="bi" [class]="producto.stock > 0 ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
           {{ producto.stock > 0 ? 'Stock: ' + producto.stock : 'Agotado' }}
         </span>
       </div>
 
-      <div class="d-grid gap-2 d-sm-flex">
-        <button (click)="agregarAlCarrito()" class="btn btn-primary btn-lg px-5 rounded-pill shadow" 
+      <div class="d-grid gap-3 d-sm-flex">
+        <button (click)="agregarAlCarrito()" 
+                class="btn btn-dark btn-lg px-5 shadow" 
                 [disabled]="producto.stock <= 0">
-          Agregar al carrito
+          <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
         </button>
-        <button routerLink="/" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">
+        
+        <button routerLink="/" class="btn btn-outline-secondary btn-lg px-4">
           Volver al catálogo
         </button>
+      </div>
+      
+      <div class="mt-4 pt-3 border-top">
+        <small class="text-muted">
+          <i class="bi bi-truck me-2"></i>Envío disponible para todo el barrio.
+        </small>
       </div>
     </div>
   </div>

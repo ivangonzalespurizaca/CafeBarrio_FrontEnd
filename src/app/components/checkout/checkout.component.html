@@ -1,104 +1,106 @@
-<div class="container mt-5 mb-5">
-  <div class="row">
+<div class="container mt-5 pt-4 mb-5">
+  <div class="row g-4">
     
     <div class="col-lg-7">
-      <div class="card shadow-lg p-4 rounded-4 border-0">
-        <h2 class="mb-4 text-center">Datos de Entrega 🚚</h2>
-        
+      <div class="card shadow-sm p-4 border-0">
+        <h2 class="mb-4 fw-bold text-dark">Datos de Entrega</h2>
+
         <form #checkoutForm="ngForm" (ngSubmit)="procesarPedido()">
-          
+
           <div class="mb-3">
-            <label class="form-label fw-bold">Nombre Completo</label>
-            <input type="text" 
-                   class="form-control" 
-                   name="nombreCliente" 
-                   [(ngModel)]="nombreCliente" 
-                   required 
-                   minlength="3" 
-                   #nameField="ngModel"
-                   [class.is-invalid]="nameField.invalid && checkoutForm.submitted">
-            <div class="invalid-feedback" *ngIf="nameField.invalid && checkoutForm.submitted">
-              El nombre completo es obligatorio (mínimo 3 letras).
-            </div>
+            <label class="form-label small fw-bold text-uppercase text-muted">Nombre Completo</label>
+            <input type="text" name="nombreCliente" [(ngModel)]="nombreCliente" required minlength="3"
+              #nameField="ngModel" placeholder="Ej: Oscar Gonzales" class="form-control" 
+              [class.is-invalid]="nameField.invalid && nameField.touched">
+
+            @if (nameField.invalid && nameField.touched) {
+              <div class="invalid-feedback">
+                @if (nameField.errors?.['required']) { El nombre es obligatorio. }
+                @if (nameField.errors?.['minlength']) { Debe tener al menos 3 letras. }
+              </div>
+            }
           </div>
 
           <div class="mb-3">
-            <label class="form-label fw-bold">Número de Celular</label>
-            <input type="tel" 
-                   class="form-control" 
-                   name="celular" 
-                   [(ngModel)]="celular" 
-                   required 
-                   pattern="[0-9]{9}" 
-                   #celField="ngModel"
-                   [class.is-invalid]="celField.invalid && checkoutForm.submitted">
-            <div class="invalid-feedback" *ngIf="celField.invalid && checkoutForm.submitted">
-              Debe tener 9 dígitos numéricos.
-            </div>
+            <label class="form-label small fw-bold text-uppercase text-muted">Número de Celular</label>
+            <input type="tel" name="celular" [(ngModel)]="celular" required pattern="[0-9]{9}" #celField="ngModel"
+              class="form-control" placeholder="Ej: 987654321" [class.is-invalid]="celField.invalid && celField.touched">
+
+            @if (celField.invalid && celField.touched) {
+              <div class="invalid-feedback">
+                @if (celField.errors?.['required']) { El celular es obligatorio. }
+                @if (celField.errors?.['pattern']) { Debe tener exactamente 9 dígitos numéricos. }
+              </div>
+            }
           </div>
 
           <div class="mb-4">
-            <label class="form-label fw-bold">Dirección de Entrega</label>
-            <textarea class="form-control" 
-                      name="direccion" 
-                      [(ngModel)]="direccion" 
-                      required 
-                      rows="2" 
-                      #dirField="ngModel"
-                      [class.is-invalid]="dirField.invalid && checkoutForm.submitted"></textarea>
-            <div class="invalid-feedback" *ngIf="dirField.invalid && checkoutForm.submitted">
-              La dirección es obligatoria.
-            </div>
+            <label class="form-label small fw-bold text-uppercase text-muted">Dirección de Entrega</label>
+            <textarea class="form-control" name="direccion" [(ngModel)]="direccion" required minlength="10" rows="2"
+              #dirField="ngModel" placeholder="Ej: Av. Las Flores 123, Int 4, Surco"
+              [class.is-invalid]="dirField.invalid && dirField.touched"></textarea>
+
+            @if (dirField.invalid && dirField.touched) {
+              <div class="invalid-feedback">
+                @if (dirField.errors?.['required']) { La dirección es obligatoria. }
+                @if (dirField.errors?.['minlength']) { Ingrese una dirección detallada (mín. 10 caracteres). }
+              </div>
+            }
           </div>
 
-          <button type="submit" 
-                  [disabled]="checkoutForm.invalid" 
-                  class="btn btn-success btn-lg w-100 rounded-pill shadow-sm py-3 fw-bold">
-            <i class="bi bi-check-circle me-2"></i>Confirmar y Pagar
+          <hr class="my-4 opacity-25">
+
+          <button type="submit" [disabled]="checkoutForm.invalid"
+            class="btn btn-dark btn-lg w-100 shadow-sm py-3 fw-bold">
+            <i class="bi bi-shield-check me-2"></i>Confirmar Pedido
           </button>
-          
-          <button routerLink="/carrito" type="button" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">
-            Volver al carrito
+
+          <button routerLink="/carrito" type="button" class="btn btn-link w-100 mt-2 text-decoration-none text-muted small">
+            <i class="bi bi-arrow-left me-1"></i> Modificar mi carrito
           </button>
         </form>
       </div>
     </div>
 
     <div class="col-lg-5">
-      <div class="card shadow-sm p-4 rounded-4 border-0 bg-light sticky-top" style="top: 20px;">
-        <h4 class="mb-4 border-bottom pb-2">Resumen de compra</h4>
-        
-        <div class="overflow-auto" style="max-height: 300px;">
-          <div class="mb-3" *ngFor="let item of items">
-            <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="card shadow-sm p-4 border-0 bg-light sticky-top" style="top: 100px;">
+        <h4 class="mb-4 fw-bold border-bottom pb-2 text-dark">Resumen de Compra</h4>
+
+        <div class="overflow-auto mb-3" style="max-height: 250px;">
+          <div class="mb-3 pe-2" *ngFor="let item of items">
+            <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex align-items-center">
-                <img [src]="item.producto.imagenUrl" class="rounded-3 me-3 border" 
-                     style="width: 50px; height: 50px; object-fit: cover;">
+                <div class="ratio ratio-1x1 bg-white rounded-3 border overflow-hidden me-3" style="width: 50px;">
+                    <img [src]="item.producto.imagenUrl || 'assets/img/default-coffee.png'" 
+                         style="object-fit: contain;">
+                </div>
                 <div>
-                  <div class="fw-bold">{{ item.producto.nombre }}</div>
-                  <small class="text-muted">Cantidad: {{ item.cantidad }}</small>
+                  <div class="fw-bold small text-dark">{{ item.producto.nombre }}</div>
+                  <small class="text-muted">Cant: {{ item.cantidad }}</small>
                 </div>
               </div>
-              <span class="fw-bold">S/ {{ item.producto.precio * item.cantidad | number:'1.2-2' }}</span>
+              <span class="fw-bold small">S/ {{ item.producto.precio * item.cantidad | number:'1.2-2' }}</span>
             </div>
           </div>
         </div>
 
-        <hr class="my-4">
-        
-        <div class="d-flex justify-content-between mb-2">
-          <span class="text-muted">Subtotal</span>
-          <span class="fw-bold">S/ {{ totalCarrito | number:'1.2-2' }}</span>
-        </div>
-        
-        <div class="d-flex justify-content-between mb-2 text-success">
-          <span>Envío</span>
-          <span class="fw-bold">Gratis</span>
-        </div>
+        <div class="py-3 border-top">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted small">Subtotal</span>
+            <span class="fw-bold small">S/ {{ totalCarrito | number:'1.2-2' }}</span>
+          </div>
 
-        <div class="d-flex justify-content-between h3 fw-bold mt-3 text-primary">
-          <span>Total</span>
-          <span>S/ {{ totalCarrito | number:'1.2-2' }}</span>
+          <div class="d-flex justify-content-between mb-2 text-success">
+            <span class="small">Envío a domicilio</span>
+            <span class="fw-bold small">Gratis</span>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="d-flex justify-content-between h4 fw-bold text-dark mt-2">
+            <span>Total</span>
+            <span>S/ {{ totalCarrito | number:'1.2-2' }}</span>
+          </div>
         </div>
       </div>
     </div>

@@ -1,1 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --cafe-oscuro: #212529; 
+  --cafe-crema: #f8f9fa;  
+  --success-cafe: #198754; 
+  --border-radius: 15px;  
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f1f1f1; /* Un gris muy sutil de fondo */
+  color: #333;
+}
+
+/* Unificamos todos los campos de texto */
+.form-control, .form-select {
+  border-radius: 10px !important;
+  border: 1px solid #dee2e6;
+  padding: 10px 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efecto elegante al hacer clic en un input */
+.form-control:focus, .form-select:focus {
+  border-color: var(--cafe-oscuro);
+  box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.1);
+  outline: none;
+}
+
+/* Tarjetas consistentes */
+.card {
+  border-radius: var(--border-radius) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+
+/* Botones con personalidad pero limpios */
+.btn {
+  border-radius: 10px !important;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.98); /* Pequeño efecto de presión al hacer clic */
+}
+
+/* Estilo para los mensajes de error */
+.invalid-feedback {
+  font-size: 0.8rem;
+  margin-left: 5px;
+}

@@ -25,5 +25,27 @@ export class ProductoService {
 
   obtenerPorId(id: number): Observable<Producto> {
     return this.http.get<Producto>(`${this.apiUrl}/${id}`);
-  }       
+  }     
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }  
+  guardarConImagen(producto: Producto, archivo: File | null): Observable<Producto> {
+    const formData = new FormData();
+
+    const productoBlob = new Blob([JSON.stringify(producto)], {
+      type: 'application/json'
+    });
+    
+    formData.append('producto', productoBlob);
+
+    if (archivo) {
+      formData.append('archivo', archivo);
+    }
+
+    if (producto.id) {
+      return this.http.put<Producto>(`${this.apiUrl}/${producto.id}`, formData);
+    } else {
+      return this.http.post<Producto>(this.apiUrl, formData);
+    }
+  }
 }

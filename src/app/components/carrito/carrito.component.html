@@ -1,49 +1,59 @@
-<div class="container mt-5">
-    <div class="row">
+<div class="container mt-5 pt-4 mb-5">
+    <div class="row g-4">
+        
         <div class="col-md-8">
-            <div class="card shadow-sm p-4 rounded-4 border-0">
-                <h3 class="mb-4">Tu Pedido ☕</h3>
+            <div class="card shadow-sm p-4 border-0">
+                <h3 class="fw-bold mb-4 text-dark">Tu Pedido </h3>
 
                 <div *ngIf="items.length === 0" class="text-center py-5">
+                    <i class="bi bi-cart-x display-1 text-muted opacity-25 mb-3"></i>
                     <p class="text-muted h5">Aún no has elegido ningún café.</p>
-                    <button routerLink="/" class="btn btn-outline-primary mt-3 rounded-pill">Volver al catálogo</button>
+                    <button routerLink="/" class="btn btn-dark mt-4 px-4">
+                        Explorar el catálogo
+                    </button>
                 </div>
 
                 <div *ngIf="items.length > 0" class="table-responsive">
-                    <table class="table align-middle">
+                    <table class="table align-middle table-borderless">
                         <thead>
-                            <tr class="text-muted">
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th class="text-center">Cantidad</th>
-                                <th>Subtotal</th>
-                                <th></th>
+                            <tr class="text-muted small text-uppercase" style="letter-spacing: 1px;">
+                                <th class="pb-3">Producto</th>
+                                <th class="pb-3">Precio</th>
+                                <th class="pb-3 text-center">Cantidad</th>
+                                <th class="pb-3">Subtotal</th>
+                                <th class="pb-3"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="border-top">
                             <tr *ngFor="let item of items">
-                                <td>
+                                <td class="py-3">
                                     <div class="d-flex align-items-center">
-                                        <img [src]="item.producto.imagenUrl" class="rounded-3 me-3"
-                                            style="width: 50px; height: 50px; object-fit: cover;">
-                                        <span class="fw-bold">{{ item.producto.nombre }}</span>
+                                        <div class="ratio ratio-1x1 bg-light rounded-3 overflow-hidden me-3" style="width: 60px;">
+                                            <img [src]="item.producto.imagenUrl || 'assets/img/default-coffee.png'" 
+                                                 class="img-fluid" style="object-fit: contain;">
+                                        </div>
+                                        <span class="fw-bold text-dark">{{ item.producto.nombre }}</span>
                                     </div>
                                 </td>
-                                <td>S/ {{ item.producto.precio }}</td>
+                                <td>S/ {{ item.producto.precio | number:'1.2-2' }}</td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center gap-2">
                                         <button (click)="disminuir(item.producto.id!)"
-                                            class="btn btn-sm btn-light rounded-circle border">-</button>
-                                        <span class="fw-bold">{{ item.cantidad }}</span>
+                                                class="btn btn-sm btn-outline-dark rounded-circle p-0" 
+                                                style="width: 28px; height: 28px;">-</button>
+                                        
+                                        <span class="fw-bold mx-1">{{ item.cantidad }}</span>
+                                        
                                         <button (click)="aumentar(item.producto)"
-                                            class="btn btn-sm btn-light rounded-circle border"
-                                            [disabled]="item.cantidad >= item.producto.stock">+</button>
+                                                class="btn btn-sm btn-dark rounded-circle p-0" 
+                                                style="width: 28px; height: 28px;"
+                                                [disabled]="item.cantidad >= item.producto.stock">+</button>
                                     </div>
                                 </td>
-                                <td class="fw-bold">S/ {{ item.producto.precio * item.cantidad | number:'1.2-2' }}</td>
-                                <td>
-                                    <button (click)="eliminar(item.producto.id!)" class="btn btn-link text-danger">
-                                        <i class="bi bi-trash"></i> Borrar
+                                <td class="fw-bold text-dark">S/ {{ item.producto.precio * item.cantidad | number:'1.2-2' }}</td>
+                                <td class="text-end">
+                                    <button (click)="eliminar(item.producto.id!)" class="btn btn-link text-danger p-0">
+                                        <i class="bi bi-trash3 fs-5"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -54,23 +64,37 @@
         </div>
 
         <div class="col-md-4" *ngIf="items.length > 0">
-            <div class="card shadow-sm p-4 rounded-4 border-0 bg-light">
-                <h4>Resumen</h4>
-                <hr>
+            <div class="card shadow-sm p-4 border-0 bg-light">
+                <h4 class="fw-bold mb-4">Resumen</h4>
+                
                 <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal</span>
+                    <span class="text-muted">Subtotal</span>
+                    <span class="fw-bold">S/ {{ total | number:'1.2-2' }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-3 text-success">
+                    <span>Envío</span>
+                    <span class="fw-bold">Gratis</span>
+                </div>
+
+                <hr class="my-4">
+                
+                <div class="d-flex justify-content-between mb-4 h3 fw-bold text-dark">
+                    <span>Total</span>
                     <span>S/ {{ total | number:'1.2-2' }}</span>
                 </div>
-                <div class="d-flex justify-content-between mb-4 h4 fw-bold">
-                    <span>Total</span>
-                    <span class="text-primary">S/ {{ total | number:'1.2-2' }}</span>
-                </div>
-                <button routerLink="/checkout" class="btn btn-primary btn-lg w-100 rounded-pill shadow">
-                    Continuar al pago
+
+                <button routerLink="/checkout" class="btn btn-dark btn-lg w-100 shadow-sm py-3 mb-3">
+                    Continuar al pago <i class="bi bi-arrow-right ms-2"></i>
                 </button>
-                <button routerLink="/" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">
+                
+                <button routerLink="/" class="btn btn-outline-secondary w-100 py-2">
                     Seguir comprando
                 </button>
+                
+                <p class="text-center text-muted extra-small mt-4">
+                    <i class="bi bi-shield-check me-1"></i> Compra segura y protegida
+                </p>
             </div>
         </div>
     </div>

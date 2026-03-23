@@ -1,0 +1,118 @@
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <div class="modal-header bg-dark text-white border-0">
+        <h5 class="modal-title fw-bold">
+          {{ productoParaEditar ? 'Editar Producto' : 'Nuevo Producto' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" (click)="resetearFormulario(prodForm)"></button>
+      </div>
+      
+      <form #prodForm="ngForm" (ngSubmit)="guardar()">
+        <div class="modal-body p-4">
+          <div class="row">
+            
+            <div class="col-md-5 text-center border-end">
+              <label class="form-label fw-bold small text-muted mb-3 text-uppercase">Imagen del Producto</label>
+              
+              <div class="image-preview-container mb-3 d-flex align-items-center justify-content-center bg-light rounded shadow-sm" 
+                   style="height: 250px; border: 2px dashed #dee2e6; cursor: pointer; transition: all 0.3s;" 
+                   (click)="fileInput.click()"
+                   onmouseover="this.style.borderColor='#212529'"
+                   onmouseout="this.style.borderColor='#dee2e6'">
+                
+                @if (previsualizacion) {
+                  <img [src]="previsualizacion" class="img-fluid rounded" style="max-height: 100%; object-fit: contain; padding: 10px;">
+                } @else {
+                  <div class="text-center text-muted p-3">
+                    <i class="bi bi-cloud-arrow-up fs-1 d-block mb-2"></i>
+                    <span class="small d-block">Haz clic para subir imagen</span>
+                    <small class="extra-small text-muted">(Opcional)</small>
+                  </div>
+                }
+              </div>
+              <input #fileInput type="file" (change)="onFileSelected($event)" hidden accept="image/*">
+            </div>
+
+            <div class="col-md-7 ps-md-4">
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted text-uppercase">Nombre del Café</label>
+                <input type="text" name="nombre" [(ngModel)]="producto.nombre" required minlength="3" 
+                       #nombreRef="ngModel" class="form-control" placeholder="Ej: Espresso Intenso"
+                       [class.is-invalid]="nombreRef.invalid && nombreRef.touched">
+                @if (nombreRef.invalid && nombreRef.touched) {
+                  <div class="invalid-feedback">El nombre debe tener al menos 3 letras.</div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted text-uppercase">Descripción Corta</label>
+                <textarea name="descripcion" [(ngModel)]="producto.descripcion" required 
+                          #descRef="ngModel" class="form-control" rows="3"
+                          placeholder="Notas de sabor, origen..."
+                          [class.is-invalid]="descRef.invalid && descRef.touched"></textarea>
+                @if (descRef.invalid && descRef.touched) {
+                  <div class="invalid-feedback">La descripción es obligatoria.</div>
+                }
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label class="form-label small fw-bold text-muted text-uppercase">Precio (S/)</label>
+                  <div class="input-group has-validation">
+                    <input type="number" name="precio" [(ngModel)]="producto.precio" required min="0.1" 
+                           #precioRef="ngModel" class="form-control" step="0.1"
+                           [class.is-invalid]="precioRef.invalid && precioRef.touched">
+                    @if (precioRef.invalid && precioRef.touched) {
+                      <div class="invalid-feedback">Mínimo S/ 0.10</div>
+                    }
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-bold text-muted text-uppercase">Stock Actual</label>
+                  <input type="number" name="stock" [(ngModel)]="producto.stock" required min="0" 
+                         #stockRef="ngModel" class="form-control"
+                         [class.is-invalid]="stockRef.invalid && stockRef.touched">
+                  @if (stockRef.invalid && stockRef.touched) {
+                    <div class="invalid-feedback">Mínimo 0 unidades.</div>
+                  }
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label small fw-bold text-muted text-uppercase">Categoría</label>
+                <select name="idCategoria" [(ngModel)]="producto.idCategoria" required 
+                        #catRef="ngModel" class="form-select"
+                        [class.is-invalid]="catRef.invalid && catRef.touched">
+                  <option value="" disabled selected>Selecciona una categoría...</option>
+                  @for (cat of categorias; track cat.id) {
+                    <option [value]="cat.id">{{ cat.nombre }}</option>
+                  }
+                </select>
+                @if (catRef.invalid && catRef.touched) {
+                  <div class="invalid-feedback">Debes elegir una categoría.</div>
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+        
+        <div class="modal-footer bg-light border-0 px-4">
+          <button (click)="resetearFormulario(prodForm)" type="button" 
+                  class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          
+          <button type="submit" class="btn btn-dark px-4 shadow-sm" 
+                  [disabled]="prodForm.invalid"
+                  data-bs-dismiss="modal">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ productoParaEditar ? 'Guardar Cambios' : 'Registrar Producto' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

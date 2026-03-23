@@ -22,6 +22,10 @@ export class PedidoService {
     return this.http.get<PedidoResponse[]>(this.apiUrl);
   }
 
+  listarPorEstado(estado: 'PENDIENTE' | 'EN_PREPARACION' | 'ENTREGADO'): Observable<PedidoResponse[]> {
+    return this.http.get<PedidoResponse[]>(`${this.apiUrl}/estado/${estado.toUpperCase()}`);
+  }
+
   // RF-FE-10: Actualizar el estado (PENDIENTE -> ENTREGADO, etc.)
   cambiarEstado(id: number, nuevoEstado: string): Observable<PedidoResponse> {
     return this.http.patch<PedidoResponse>(`${this.apiUrl}/${id}/estado`, { estado: nuevoEstado });

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Necesario para el formulario
-import { CarritoService } from '../../services/carrito.service'; // Debes crear este servicio
+import { FormsModule } from '@angular/forms';
+import { CarritoService } from '../../services/carrito.service';
 import { Router, RouterModule } from '@angular/router';
 import { PedidoService } from '../../services/pedido.service';
+import Swal from 'sweetalert2'; // 1. Importamos SweetAlert2
 
 @Component({
   selector: 'app-checkout',
@@ -11,8 +12,7 @@ import { PedidoService } from '../../services/pedido.service';
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './checkout.component.html'
 })
-export class CheckoutComponent {
-  // Datos del formulario
+export class CheckoutComponent implements OnInit {
   nombreCliente: string = '';
   celular: string = '';
   direccion: string = '';
@@ -23,33 +23,55 @@ export class CheckoutComponent {
     private carritoService: CarritoService,
     private pedidoService: PedidoService,
     private router: Router
-  ) {
-    this.totalCarrito = this.carritoService.obtenerTotal();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.carritoService.carrito$.subscribe(data => {
-      this.items = data; // <--- Ahora 'items' ya existe y el HTML no dará error
+      this.items = data;
       this.totalCarrito = this.carritoService.obtenerTotal();
     });
   }
 
   procesarPedido() {
-    // 1. Preparamos el objeto usando la lógica que ya tienes en el CarritoService
+    // 2. Mostramos un modal de carga (Loading) para mejorar la UX mientras el servidor responde
+    Swal.fire({
+      title: 'Procesando tu pedido...',
+      text: 'Estamos preparando todo tu café ☕',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     const pedidoParaEnviar = this.carritoService.prepararPedido(
       this.nombreCliente, 
       this.celular, 
       this.direccion
     );
 
-    // 2. Enviamos al Backend
     this.pedidoService.registrar(pedidoParaEnviar).subscribe({
       next: (res) => {
-        alert(`¡Pedido #${res.id} realizado con éxito!`);
-        this.carritoService.limpiarCarrito();
-        this.router.navigate(['/']); // Volver al catálogo
+        // 3. Éxito: Modal elegante con botón oscuro (estilo marca)
+        Swal.fire({
+          icon: 'success',
+          title: '¡Pedido Realizado!',
+          html: `Tu orden <b>#${res.id}</b> ha sido registrada con éxito. <br> En breve nos comunicaremos contigo.`,
+          confirmButtonColor: '#212529', // Color Dark de nuestra marca
+          confirmButtonText: 'Volver al inicio'
+        }).then((result) => {
+          this.carritoService.limpiarCarrito();
+          this.router.navigate(['/']);
+        });
       },
-      error: (err) => alert('Error al procesar pedido: ' + err.error.message)
+      error: (err) => {
+        // 4. Error: Modal de advertencia
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Hubo un problema al procesar tu pedido: ' + (err.error.message || 'Error de conexión'),
+          confirmButtonColor: '#212529'
+        });
+      }
     });
   }
 }

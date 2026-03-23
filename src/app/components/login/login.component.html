@@ -1,0 +1,83 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg border-0 p-4" style="max-width: 400px; width: 100%;">
+    
+    <div class="text-center mb-4">
+      <h1 class="display-4 mb-2">☕</h1>
+      <h3 class="fw-bold text-dark">Panel Administrativo</h3>
+      <p class="text-muted small">Ingresa tus credenciales para continuar</p>
+      
+      <div class="bg-light p-3 rounded-3 border border-secondary-subtle mt-3 text-start">
+        <p class="mb-1 extra-small text-uppercase fw-bold text-muted" style="font-size: 0.65rem; letter-spacing: 1px;">
+          Acceso de Prueba
+        </p>
+        <div class="small">
+          <span class="fw-bold">Usuario:</span> admin&#64;gmail.com<br>
+          <span class="fw-bold">Clave:</span> admin1234
+        </div>
+      </div>
+    </div>
+
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit($event)">
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-muted text-uppercase">Email</label>
+        <input 
+          type="email" 
+          name="email" 
+          class="form-control shadow-sm" 
+          placeholder="admin@gmail.com" 
+          required 
+          email
+          #emailInput="ngModel"
+          [(ngModel)]="emailVal"
+          [class.is-invalid]="emailInput.invalid && emailInput.touched">
+        
+        @if (emailInput.invalid && emailInput.touched) {
+          <div class="invalid-feedback ps-2">
+            @if (emailInput.errors?.['required']) { El email es obligatorio }
+            @if (emailInput.errors?.['email']) { Formato de email inválido }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label small fw-bold text-muted text-uppercase">Contraseña</label>
+        <input 
+          type="password" 
+          name="password" 
+          class="form-control shadow-sm" 
+          placeholder="********" 
+          required
+          minlength="4"
+          #passInput="ngModel"
+          [(ngModel)]="passVal"
+          [class.is-invalid]="passInput.invalid && passInput.touched">
+
+        @if (passInput.invalid && passInput.touched) {
+          <div class="invalid-feedback ps-2">
+            La contraseña requiere al menos 4 caracteres
+          </div>
+        }
+      </div>
+      
+      @if (errorMsg) {
+        <div class="alert alert-danger py-2 small text-center border-0 shadow-sm mb-3">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        </div>
+      }
+
+      <button 
+        type="submit" 
+        class="btn btn-dark w-100 py-2 mt-2 shadow" 
+        [disabled]="loginForm.invalid || loading">
+        <i class="bi bi-box-arrow-in-right me-2"></i>
+        {{ loading ? 'Verificando...' : 'Iniciar Sesión' }}
+      </button>
+
+      <div class="text-center mt-3">
+        <button routerLink="/" type="button" class="btn btn-link btn-sm text-decoration-none text-muted">
+          <i class="bi bi-arrow-left me-1"></i> Volver a la tienda
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
